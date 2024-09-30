@@ -27,10 +27,16 @@ func NewLink() *Link{
 	return link
 }
 
-func (link Link) Validate() error{
+func (link *Link) Validate() error{
 	_, err := govalidator.ValidateStruct(link)
 	if err != nil{
 		return err
 	}
 	return nil
+}
+
+// IsValidLink valida a estrutura do link
+func IsValidLink(link string) bool {
+    // Lógica simplificada de validação de URL
+    return link != "" && len(link) > 5
 }

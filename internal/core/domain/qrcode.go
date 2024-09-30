@@ -11,9 +11,9 @@ var ALLOWED_FORMATS = []string{"png", "jpeg"}
 
 type QRCode struct{
 	ID			string		`valid:"uuid"`
-	Image		[]byte		`valid:"notnull"`
+	Image		[]byte		`valid:"-"`
 	Format		string		`valid:"notnull"`
-	LinkID		string		`valid:"notnull"`
+	Link		Link		`valid:"-"`
 	CreatedAt	time.Time	`valid:"-"`
 }
 
@@ -42,10 +42,15 @@ func isFormatAllowed(format string) bool {
 	return false
 }
 
-func (qrcode QRCode) Validate() error{
+func (qrcode *QRCode) Validate() error{
 	_, err := govalidator.ValidateStruct(qrcode)
 	if err != nil{
 		return err
+	}
+
+	// Verificação manual do campo Image
+	if len(qrcode.Image) == 0 {
+		return errors.New("image cannot be empty")
 	}
 
 	if !isFormatAllowed(qrcode.Format) {

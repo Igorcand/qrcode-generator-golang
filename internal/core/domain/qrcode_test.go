@@ -20,7 +20,7 @@ func TestValidadeIfIdIsNotUuid(t *testing.T){
 	qrcode.Image = []byte("image")
 	qrcode.Format = "png"
 	qrcode.CreatedAt = time.Now()
-	qrcode.LinkID = "abc"
+	qrcode.Link = *domain.NewLink()
 
 	err := qrcode.Validate()
 	require.Error(t, err)
@@ -30,7 +30,7 @@ func TestValidadeNotValidFormat(t *testing.T){
 	qrcode := domain.NewQRCode()
 	qrcode.Image = []byte("image")
 	qrcode.Format = "abc"
-	qrcode.LinkID = "123"
+	qrcode.Link = *domain.NewLink()
 	err := qrcode.Validate()
 	require.Error(t, err)
 }
@@ -39,7 +39,8 @@ func TestQRCodeIsValid(t *testing.T){
 	qrcode := domain.NewQRCode()
 	qrcode.Image = []byte("image")
 	qrcode.Format = "png"
-	qrcode.LinkID = "123"
+	qrcode.Link = *domain.NewLink()
+	qrcode.Link.Url = "https://www.google.com"
 	err := qrcode.Validate()
 	require.Nil(t, err)
 }
