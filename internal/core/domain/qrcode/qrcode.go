@@ -1,9 +1,10 @@
-package domain
+package qrcode
 
 import (
 	"time"
 	"errors"
 	"github.com/asaskevich/govalidator"
+	"qrcode-generator/internal/core/domain/link"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -13,7 +14,7 @@ type QRCode struct{
 	ID			string		`valid:"uuid"`
 	Image		[]byte		`valid:"-"`
 	Format		string		`valid:"notnull"`
-	Link		Link		`valid:"-"`
+	Link		link.Link		`valid:"-"`
 	CreatedAt	time.Time	`valid:"-"`
 }
 

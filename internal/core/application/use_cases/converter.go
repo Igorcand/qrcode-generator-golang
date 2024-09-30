@@ -3,8 +3,11 @@ package application
 import (
 	"bytes"
 	"errors"
-	"qrcode-generator/internal/core/domain"
-	"github.com/skip2/go-qrcode"
+	"qrcode-generator/internal/core/domain/link"
+	"qrcode-generator/internal/core/domain/qrcode"
+
+
+	qrcode_gen "github.com/skip2/go-qrcode"
 )
 
 type ConverterService struct{}
@@ -13,13 +16,13 @@ func NewConverterService() ConverterService {
 	return ConverterService{}
 }
 
-func (s *ConverterService) ConverterLinkToQRCode(qrCode *domain.QRCode) (*domain.QRCode, error){
-	if !domain.IsValidLink(qrCode.Link.Url){
+func (s *ConverterService) ConverterLinkToQRCode(qrcode *qrcode.QRCode) (*qrcode.QRCode, error){
+	if !link.IsValidLink(qrcode.Link.Url){
 		return nil, errors.New("invalid link")
 	}
 
 	// Gera o QR code diretamente usando a biblioteca go-qrcode
-    qrCodeData, err := qrcode.New(qrCode.Link.Url, qrcode.Medium)
+    qrCodeData, err := qrcode_gen.New(qrcode.Link.Url, qrcode_gen.Medium)
     if err != nil {
         return nil, err
     }
@@ -35,13 +38,13 @@ func (s *ConverterService) ConverterLinkToQRCode(qrCode *domain.QRCode) (*domain
 		return nil, err
 	}
 
-	qrCode.Image = buffer.Bytes()
+	qrcode.Image = buffer.Bytes()
 
-	err = qrCode.Validate()
+	err = qrcode.Validate()
 	if err != nil{
 		return nil, err
 	}
 
-	return qrCode, nil
+	return qrcode, nil
 
 }
